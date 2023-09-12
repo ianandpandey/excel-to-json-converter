@@ -1,0 +1,49 @@
+/* FileUploadPage.css */
+
+.file-upload-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 20px;
+}
+
+.main {
+  /* display: flex; */
+  text-align: center;
+}
+
+input[type='file'] {
+  /* Optionally add some additional styles, such as background-color, padding, etc. */
+  background-color: white;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  opacity: 100;
+}
+
+/* Style the custom button as before */
+.upload-label {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+.upload-label.uploading {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.upload-label:hover {
+  background-color: #0056b3;
+}
+
+.message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
