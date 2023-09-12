@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import XLSX from 'xlsx';
 import './FileUploadPage.css';
 
 const FileUploadPage = ({ handleFileUpload }) => {

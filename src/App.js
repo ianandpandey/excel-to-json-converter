@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css'; // Import your CSS file
 import FileUploadPage from './FileUpload';
 import ResultPage from './ResultPage';
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 
 const App = () => {
   const [jsonResult, setJsonResult] = useState(null);
