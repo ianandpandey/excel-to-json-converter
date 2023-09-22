@@ -4,12 +4,15 @@ import FileUploadPage from './FileUpload';
 import ResultPage from './ResultPage';
 import * as XLSX from 'xlsx';
 
+// ... (your existing code)
+
 const App = () => {
   const [jsonResult, setJsonResult] = useState(null);
   const [downloadableData, setDownloadableData] = useState(null);
   const [downloadButtonEnabled, setDownloadButtonEnabled] = useState(false);
+  const [originalFileName, setOriginalFileName] = useState('');
 
-  const handleFileUpload = async (file) => {
+  const handleFileUpload = async ({ file, originalFileName }) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const data = e.target.result;
@@ -43,6 +46,7 @@ const App = () => {
         return obj;
       });
 
+      setOriginalFileName(originalFileName);
       setJsonResult(jsonResult);
       setDownloadableData(jsonResult);
       setDownloadButtonEnabled(true);
@@ -57,8 +61,9 @@ const App = () => {
       });
       const url = URL.createObjectURL(jsonBlob);
       const a = document.createElement('a');
+      // Use the original file name for the downloaded JSON file
       a.href = url;
-      a.download = 'convertedData.json';
+      a.download = originalFileName.replace(/\s/g, '_').toLowerCase() + '.json'; // Add .json extension
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -80,3 +85,5 @@ const App = () => {
 };
 
 export default App;
+
+// export default App;

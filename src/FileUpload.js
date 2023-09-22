@@ -20,7 +20,8 @@ const FileUploadPage = ({ handleFileUpload }) => {
     setLoading(true);
 
     try {
-      await handleFileUpload(file);
+      // Pass the original file object and its name to the parent component
+      await handleFileUpload({ file, originalFileName: file.name });
       setMessage('File uploaded and converted successfully.');
     } catch (error) {
       console.error(error);
