@@ -1,28 +1,21 @@
 import React from 'react';
-import './ResultPage.css';
 
 const ResultPage = ({ jsonResult, downloadButtonEnabled, handleDownload }) => {
   return (
     <div>
-      <div className="download-button-container">
-        <button
-          className="download-button"
-          onClick={handleDownload}
-          disabled={!downloadButtonEnabled}
-        >
-          Download JSON
-        </button>
-      </div>
-
-      {jsonResult && ( // Conditionally render the JSON display box
-        <div className="json-display-box">
-          <div>
-            <h2>Converted JSON Data:</h2>
-            <pre className="json-text">
-              {JSON.stringify(jsonResult, null, 2)}
-            </pre>
-          </div>
+      {jsonResult.length > 0 && (
+        <div>
+          <h2>Converted Results</h2>
+          {jsonResult.map((result, index) => (
+            <div key={index}>
+              <h3>{result.fileName}</h3>
+              <pre>{JSON.stringify(result.jsonData, null, 2)}</pre>
+            </div>
+          ))}
         </div>
+      )}
+      {downloadButtonEnabled && (
+        <button onClick={handleDownload}>Download All as JSON</button>
       )}
     </div>
   );

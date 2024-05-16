@@ -4,13 +4,9 @@ import FileUploadPage from './FileUpload';
 import ResultPage from './ResultPage';
 import * as XLSX from 'xlsx';
 
-// ... (your existing code)
-
 const App = () => {
-  const [jsonResult, setJsonResult] = useState(null);
-  const [downloadableData, setDownloadableData] = useState(null);
+  const [jsonResults, setJsonResults] = useState([]);
   const [downloadButtonEnabled, setDownloadButtonEnabled] = useState(false);
-  const [originalFileName, setOriginalFileName] = useState('');
 
   const handleFileUpload = async ({ file, originalFileName }) => {
     const reader = new FileReader();
@@ -46,37 +42,37 @@ const App = () => {
         return obj;
       });
 
-      setOriginalFileName(originalFileName);
-      setJsonResult(jsonResult);
-      setDownloadableData(jsonResult);
+      setJsonResults((prevResults) => [
+        ...prevResults,
+        { fileName: originalFileName, jsonData: jsonResult },
+      ]);
       setDownloadButtonEnabled(true);
     };
     reader.readAsBinaryString(file);
   };
 
   const handleDownload = () => {
-    if (downloadableData) {
-      const jsonBlob = new Blob([JSON.stringify(downloadableData, null, 2)], {
+    jsonResults.forEach(({ fileName, jsonData }) => {
+      const jsonBlob = new Blob([JSON.stringify(jsonData, null, 2)], {
         type: 'application/json',
       });
       const url = URL.createObjectURL(jsonBlob);
       const a = document.createElement('a');
-      // Use the original file name for the downloaded JSON file
       a.href = url;
-      a.download = originalFileName.replace(/\s/g, '_').toLowerCase() + '.json'; // Add .json extension
+      a.download = fileName.replace(/\s/g, '_').toLowerCase() + '.json'; // Add .json extension
       a.click();
       URL.revokeObjectURL(url);
-    }
+    });
   };
 
   return (
-    <div className="container">
-      <h1 className="header">Excel to JSON Converter</h1>
+    <div className='container'>
+      <h1 className='header'>Excel to JSON Converter</h1>
       <div>
         <FileUploadPage handleFileUpload={handleFileUpload} />
       </div>
       <ResultPage
-        jsonResult={jsonResult}
+        jsonResult={jsonResults}
         downloadButtonEnabled={downloadButtonEnabled}
         handleDownload={handleDownload}
       />
@@ -85,5 +81,3 @@ const App = () => {
 };
 
 export default App;
-
-// export default App;

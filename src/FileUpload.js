@@ -2,45 +2,52 @@ import React, { useState } from 'react';
 import './FileUploadPage.css';
 
 const FileUploadPage = ({ handleFileUpload }) => {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    setFiles(Array.from(event.target.files));
     setMessage('');
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      setMessage('Please select a file.');
+    if (files.length === 0) {
+      setMessage('Please select at least one file.');
       return;
     }
 
     setLoading(true);
+    setMessage('');
 
     try {
-      // Pass the original file object and its name to the parent component
-      await handleFileUpload({ file, originalFileName: file.name });
-      setMessage('File uploaded and converted successfully.');
+      for (const file of files) {
+        await handleFileUpload({ file, originalFileName: file.name });
+      }
+      setMessage('Files uploaded and converted successfully.');
     } catch (error) {
       console.error(error);
-      setMessage('Error converting file.');
+      setMessage('Error converting files.');
     } finally {
       setLoading(false);
-      setFile(null);
+      setFiles([]);
     }
   };
 
   return (
-    <div className="main">
-      <input type="file" accept=".xlsx,.xls" onChange={handleFileChange} />
+    <div className='main'>
+      <input
+        type='file'
+        accept='.xlsx,.xls'
+        onChange={handleFileChange}
+        multiple
+      />
       <button
-        className="upload-label"
+        className='upload-label'
         onClick={handleUpload}
         disabled={loading}
       >
-        {loading ? 'Uploading...' : 'Upload Excel File'}
+        {loading ? 'Uploading...' : 'Upload Excel Files'}
       </button>
       {message && <p>{message}</p>}
     </div>
